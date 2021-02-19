@@ -76,7 +76,7 @@ export function load<T = any>(Target: ClassConstructor<T>, conf: Partial<LoadCon
   };
 
   const filePath = join(c.envPath, c.envFile)
-  let parsed = {}
+  let parsed: {[key: string]: unknown} = {}
   if (existsSync(filePath)) {
     parsed = parse(readFileSync(filePath, { encoding: 'utf-8' }).toString());
   }

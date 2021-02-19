@@ -1,15 +1,16 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "module": "commonjs",
+    "strict": true,
+    "sourceMap": true,
     "declaration": true,
-    "removeComments": true,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true
-  }
+    "target": "ES2020",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2020", "dom"]
+  },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "**/*.spec.ts", "src/__tests__"]
 }
