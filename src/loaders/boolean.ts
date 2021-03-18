@@ -1,5 +1,5 @@
-import { EnvOption } from './base';
-import { EnvLoadError } from './error';
+import { EnvOption } from "./base";
+import { EnvLoadError } from "./error";
 export class EnvBoolOption extends EnvOption<boolean> {
   protected loadType(rawValue: string): boolean {
     const valueLower = rawValue.toLowerCase();

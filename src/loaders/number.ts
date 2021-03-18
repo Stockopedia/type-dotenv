@@ -1,5 +1,5 @@
-import { EnvOption } from './base';
-import { EnvLoadError } from './error';
+import { EnvOption } from "./base";
+import { EnvLoadError } from "./error";
 
 export class EnvNumberOption extends EnvOption<number> {
   protected loadType(rawValue: string): number {

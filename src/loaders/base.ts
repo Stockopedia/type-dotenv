@@ -1,4 +1,4 @@
-import { EnvLoadError } from './error';
+import { EnvLoadError } from "./error";
 
 export abstract class EnvOption<T> {
   private isOptional = false;
