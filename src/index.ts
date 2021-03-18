@@ -1,5 +1,13 @@
 import * as dotenv from "dotenv";
-import { EnvOption, EnvNumberOption, EnvBoolOption, EnvStringOption } from './loaders';
+
+import {
+  EnumDef,
+  EnvBoolOption,
+  EnvEnumOption,
+  EnvNumberOption,
+  EnvOption,
+  EnvStringOption,
+} from "./loaders";
 
 type EnvOptionValueOf<O> = O extends EnvOption<infer T> ? T : never;
 
@@ -14,6 +22,10 @@ class EnvLoader {
 
   bool(envVar: string): EnvBoolOption {
     return new EnvBoolOption(envVar);
+  }
+
+  enum<E>(envVar: string, enumeration: EnumDef<E>): EnvEnumOption<E> {
+    return new EnvEnumOption(envVar, enumeration);
   }
 
   load<T extends Record<string, EnvOption<any>>>(
