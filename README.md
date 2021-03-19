@@ -1,38 +1,98 @@
-# type-dotenv
+# typed-env
 
-An extremely simple typed dotenv loader.
+A declarative environment loader for TypeScript.
 
-### Usage
+## Install
+
+```shell
+npm install --save @stockopedia/typed-env
+# or
+yarn add @stockopedia/typed-env
+```
+
+## Usage
 
 ```typescript
-import { load, IsBoolean, IsString, IsNumber } from 'type-dotenv';
+import { env } from '@stockopedia/typed-env'
 
-class Environment {
-  @IsString()
-  NODE_ENV!: string;
-
-  @IsNumber()
-  PORT: number = 1337;
-
-  @IsString()
-  URL: string = 'http://localhost:1337';
-
-  @IsBoolean()
-  ENABLE_PLAYGROUND: boolean = false;
-
-  // by default, everything is required
-  @IsString({ required: false })
-  ANALYTICS_KEY?: string;
+enum Fruit {
+  Apples = "apples",
+  Bananas = "bananas",
 }
 
-export const env = load(Environment);
+// Assuming this environment
+process.env["STRING"] = "my string";
+process.env["NUMBER"] = "42";
+process.env["IS_ON"] = "1";
+process.env["FRUIT"] = "apples";
 
-// or with config (these are defaults)
-
-export const env = load(Environment, {
-    envPath: process.cwd(),
-    envFile: `.env.${process.env.NODE_ENV || 'development'}`
+const config = env.load({
+  str: env.string("STRING"),
+  num: env.number("NUMBER"),
+  on: env.bool("IS_ON"),
+  fruit: env.enum("FRUIT", Fruit),
 });
 
-console.log(env instanceof Environment) // true
+console.log(config);
+// Will be
+{
+  str: "my string",
+  num: 42,
+  on: true,
+  fruit: Fruit.Apples,
+}
+
+// Config will have the implicit type:
+interface Config {
+  str: string;
+  num: number;
+  on: boolean;
+  fruit: Fruit;
+}
+```
+
+### Optional values
+
+By default, any values not found in the environment will throw an error, 
+but sometimes you want some values to be optional, e.g.
+
+```typescript
+const config = env.load({
+  str: env.string("STRING").optional(),
+  num: env.number("NUMBER").optional(),
+  on: env.bool("IS_ON").optional(),
+  fruit: env.enum("FRUIT", Fruit).optional(),
+});
+
+console.log(config);
+// Will be if the values aren't in the environment
+{
+  str: null,
+  num: null,
+  on: null,
+  fruit: null,
+}
+```
+
+### Default values
+
+If you want to provide defaults for optional value, it's a cinch:
+
+```typescript
+const config = env.load({
+  str: env.string("STRING").optional().default("val"),
+  num: env.number("NUMBER").optional().default(99),
+  on: env.bool("IS_ON").optional().default(false),
+  fruit: env.enum("FRUIT", Fruit).optional().default(Fruit.Bananas),
+});
+
+
+console.log(config);
+// Will be if the values aren't in the environment
+{
+  str: "val", 
+  num: 99,
+  on: false,
+  fruit: Fruit.Bananas,
+}
 ```
