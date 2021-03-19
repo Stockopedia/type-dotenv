@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-
 import {
   EnumDef,
   EnvBooleanOption,
@@ -31,7 +29,6 @@ class EnvLoader {
   load<T extends Record<string, EnvOption<any>>>(
     config: T,
   ): { [K in keyof T]: Readonly<EnvOptionValueOf<T[K]>> } {
-    dotenv.config();
     const valueEntities = Object.entries(config).map(([key, option]) => {
       return [key, option.load()];
     });
