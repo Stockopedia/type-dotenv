@@ -1,6 +1,6 @@
 import { EnvOption } from "./base";
 import { EnvLoadError } from "./error";
-export class EnvBoolOption extends EnvOption<boolean> {
+export class EnvBooleanOption extends EnvOption<boolean> {
   protected loadType(rawValue: string): boolean {
     const valueLower = rawValue.toLowerCase();
     if (["1", "true"].includes(valueLower)) {
@@ -9,7 +9,7 @@ export class EnvBoolOption extends EnvOption<boolean> {
       return false;
     } else {
       throw new EnvLoadError(
-        `${this.envVar} must represent a boolean value {0, 1, true, false}! Found "${rawValue}".`,
+        `"${this.envVar}" must represent a boolean value {0, 1, true, false}! Found "${rawValue}".`,
       );
     }
   }

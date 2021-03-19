@@ -26,7 +26,7 @@ export abstract class EnvOption<T> {
       return this.loadOptional();
     } else {
       throw new EnvLoadError(
-        `Could not find ${this.envVar} in the environment!`,
+        `Could not find "${this.envVar}" in the environment!`,
       );
     }
   }
