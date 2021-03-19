@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 
 import {
   EnumDef,
-  EnvBoolOption,
+  EnvBooleanOption,
   EnvEnumOption,
   EnvNumberOption,
   EnvOption,
@@ -20,8 +20,8 @@ class EnvLoader {
     return new EnvStringOption(envVar);
   }
 
-  bool(envVar: string): EnvBoolOption {
-    return new EnvBoolOption(envVar);
+  bool(envVar: string): EnvBooleanOption {
+    return new EnvBooleanOption(envVar);
   }
 
   enum<E>(envVar: string, enumeration: EnumDef<E>): EnvEnumOption<E> {
