@@ -2,6 +2,8 @@
 
 A declarative environment loader for TypeScript.
 
+Copyright Stockopedia Ltd. 2021.
+
 ## Install
 
 ```shell
