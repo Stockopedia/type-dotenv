@@ -1,7 +1,7 @@
 {
   "name": "@stockopedia/typed-env",
   "version": "1.0.1",
-  "description": "",
+  "description": "A strongly typed way to load environment variables",
   "repository": {
     "url": "https://github.com/Stockopedia/typed-env"
   },
