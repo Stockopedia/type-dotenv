@@ -2,6 +2,9 @@
   "name": "@stockopedia/typed-env",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "url": "https://github.com/Stockopedia/typed-env"
+  },
   "private": false,
   "main": "dist/index.js",
   "scripts": {
