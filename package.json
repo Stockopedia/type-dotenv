@@ -31,8 +31,5 @@
       "parser": "typescript"
     }
   },
-  "dependencies": {},
-  "publishConfig": {
-    "registry": "https://verdaccio.stocko-infra.net"
-  }
+  "dependencies": {}
 }
