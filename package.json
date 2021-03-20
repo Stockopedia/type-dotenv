@@ -2,6 +2,7 @@
   "name": "@stockopedia/typed-env",
   "version": "1.0.0",
   "description": "",
+  "private": false,
   "main": "dist/index.js",
   "scripts": {
     "test": "jest --coverage",
