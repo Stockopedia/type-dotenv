@@ -32,5 +32,8 @@
       "parser": "typescript"
     }
   },
-  "dependencies": {}
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
 }
