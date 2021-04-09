@@ -55,7 +55,7 @@ interface Config {
 
 ### Optional values
 
-By default, any values not found in the environment will throw an error, 
+By default, any values not found in the environment will throw an error,
 but sometimes you want some values to be optional, e.g.
 
 ```typescript
@@ -76,6 +76,14 @@ console.log(config);
 }
 ```
 
+You can also chose to make values optional only under certain circumstances, by passing a predicate, e.g.
+
+```typescript
+const config = env.load({
+  str: env.string("STRING").optional(() => process.env.NODE_ENV === 'development'),
+});
+```
+
 ### Default values
 
 If you want to provide defaults for optional value, it's a cinch:
@@ -92,7 +100,7 @@ const config = env.load({
 console.log(config);
 // Will be if the values aren't in the environment
 {
-  str: "val", 
+  str: "val",
   num: 99,
   on: false,
   fruit: Fruit.Bananas,
