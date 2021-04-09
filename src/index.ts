@@ -9,22 +9,22 @@ import {
 
 type EnvOptionValueOf<O> = O extends EnvOption<infer T> ? T : never;
 
-class EnvLoader {
+export const env = {
   number(envVar: string): EnvNumberOption {
     return new EnvNumberOption(envVar);
-  }
+  },
 
   string(envVar: string): EnvStringOption {
     return new EnvStringOption(envVar);
-  }
+  },
 
   bool(envVar: string): EnvBooleanOption {
     return new EnvBooleanOption(envVar);
-  }
+  },
 
   enum<E>(envVar: string, enumeration: EnumDef<E>): EnvEnumOption<E> {
     return new EnvEnumOption(envVar, enumeration);
-  }
+  },
 
   load<T extends Record<string, EnvOption<any>>>(
     config: T,
@@ -33,7 +33,5 @@ class EnvLoader {
       return [key, option.load()];
     });
     return Object.fromEntries(valueEntities);
-  }
-}
-
-export const env = new EnvLoader();
+  },
+} as const;
