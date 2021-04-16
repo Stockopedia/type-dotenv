@@ -80,7 +80,7 @@ You can also choose to make values optional only under certain circumstances, by
 
 ```typescript
 const config = loadEnv(({ string }) => ({
-  str: string("STRING").optional(() => process.env.NODE_ENV === 'development'),
+  str: string("STRING").optional(process.env.NODE_ENV === 'development'),
 }));
 ```
 
