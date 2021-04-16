@@ -1,4 +1,4 @@
-import { env } from "./index";
+import { loadEnv } from "./index";
 import {
   EnvBooleanOption,
   EnvEnumOption,
@@ -13,38 +13,90 @@ enum Fruit {
 
 describe("Env loader", () => {
   describe("string", () => {
+    const stringKey = "VALUE";
+    beforeAll(() => {
+      process.env[stringKey] = "val";
+    });
+
+    afterAll(() => {
+      delete process.env[stringKey];
+    });
+
     it("should create the appropriate EnvStringOption", () => {
-      const envStringOption = env.string("VALUE");
+      let envStringOption: EnvStringOption | undefined;
+      loadEnv(({ string }) => {
+        envStringOption = string(stringKey);
+        return { value: envStringOption };
+      });
       expect(envStringOption).toBeInstanceOf(EnvStringOption);
-      expect((envStringOption as any).envVar).toBe("VALUE");
+      expect((envStringOption as any).envVar).toBe(stringKey);
     });
   });
 
   describe("number", () => {
+    const numberKey = "NUM";
+    beforeAll(() => {
+      process.env[numberKey] = "42";
+    });
+
+    afterAll(() => {
+      delete process.env[numberKey];
+    });
+
     it("should create the appropriate EnvNumberOption", () => {
-      const envNumberOption = env.number("NUM");
+      let envNumberOption: EnvNumberOption | undefined;
+      loadEnv(({ number }) => {
+        envNumberOption = number(numberKey);
+        return { num: envNumberOption };
+      });
       expect(envNumberOption).toBeInstanceOf(EnvNumberOption);
-      expect((envNumberOption as any).envVar).toBe("NUM");
+      expect((envNumberOption as any).envVar).toBe(numberKey);
     });
   });
 
   describe("boolean", () => {
+    const boolKey = "IS_ACTIVE";
+    beforeAll(() => {
+      process.env[boolKey] = "1";
+    });
+
+    afterAll(() => {
+      delete process.env[boolKey];
+    });
+
     it("should create the appropriate EnvBooleanOption", () => {
-      const envBooleanOption = env.bool("IS_ACTIVE");
+      let envBooleanOption: EnvBooleanOption | undefined;
+      loadEnv(({ bool }) => {
+        envBooleanOption = bool("IS_ACTIVE");
+        return { isActive: envBooleanOption };
+      });
       expect(envBooleanOption).toBeInstanceOf(EnvBooleanOption);
       expect((envBooleanOption as any).envVar).toBe("IS_ACTIVE");
     });
   });
 
   describe("enum", () => {
+    const enumKey = "FRUIT";
+    beforeAll(() => {
+      process.env[enumKey] = "apples";
+    });
+
+    afterAll(() => {
+      delete process.env[enumKey];
+    });
+
     it("should create the appropriate EnvEnumOption", () => {
-      const envEnumOption = env.enum("FRUIT", Fruit);
+      let envEnumOption: EnvEnumOption<Fruit> | undefined;
+      loadEnv(({ enumeration }) => {
+        envEnumOption = enumeration("FRUIT", Fruit);
+        return { fruit: envEnumOption };
+      });
       expect(envEnumOption).toBeInstanceOf(EnvEnumOption);
       expect((envEnumOption as any).envVar).toBe("FRUIT");
     });
   });
 
-  describe("load", () => {
+  describe("loading", () => {
     it("should load the appropriate data from the environment", () => {
       const stringKey = "STRING";
       const numberKey = "NUMBER";
@@ -58,12 +110,12 @@ describe("Env loader", () => {
       process.env[booleanKey] = "1";
       process.env[enumKey] = "apples";
 
-      const config = env.load({
-        str: env.string(stringKey),
-        num: env.number(numberKey),
-        on: env.bool(booleanKey),
-        fruit: env.enum(enumKey, Fruit),
-      });
+      const config = loadEnv(({ string, number, bool, enumeration }) => ({
+        str: string(stringKey),
+        num: number(numberKey),
+        on: bool(booleanKey),
+        fruit: enumeration(enumKey, Fruit),
+      }));
 
       expect(config).toEqual({
         str: stringValue,

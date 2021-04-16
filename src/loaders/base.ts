@@ -6,8 +6,8 @@ export abstract class EnvOption<T> {
 
   constructor(protected readonly envVar: string) {}
 
-  optional(predicate: () => boolean = () => true): EnvOption<T> {
-    if (predicate()) {
+  optional(predicate = true): EnvOption<T> {
+    if (predicate) {
       this.isOptional = true;
     }
     return this;
@@ -34,10 +34,6 @@ export abstract class EnvOption<T> {
   }
 
   private loadOptional(): T {
-    if (this.defaultValue !== null) {
-      return this.defaultValue;
-    } else {
-      return (null as unknown) as T;
-    }
+    return this.defaultValue as unknown as T;
   }
 }

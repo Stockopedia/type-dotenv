@@ -10,15 +10,23 @@ describe("Base loader", () => {
   const envKey = "SOME_STRING";
 
   describe("the optional method", () => {
-    describe("given predicate is true", () => {
+
+    describe("given no predicate is used", () => {
       it("should mark as optional", () => {
-        expect(new TestOption(envKey).optional(() => true).load()).toBe(null);
+        expect(new TestOption(envKey).optional().load()).toBe(null);
       });
     });
+
+    describe("given predicate is true", () => {
+      it("should mark as optional", () => {
+        expect(new TestOption(envKey).optional(true).load()).toBe(null);
+      });
+    });
+
     describe("given predicate is false", () => {
       it("should not mark as optional", () => {
         expect(() =>
-          new TestOption(envKey).optional(() => false).load(),
+          new TestOption(envKey).optional(false).load(),
         ).toThrow(`Could not find "${envKey}" in the environment!`);
       });
     });
