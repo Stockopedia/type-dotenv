@@ -6,10 +6,9 @@ import {
   EnvOption,
   EnvStringOption,
 } from "./loaders";
+import { EnvOptionValueOf, Loaders } from './models'
 
-type EnvOptionValueOf<O> = O extends EnvOption<infer T> ? T : never;
-
-export const env = {
+const loaders: Loaders = {
   number(envVar: string): EnvNumberOption {
     return new EnvNumberOption(envVar);
   },
@@ -22,16 +21,23 @@ export const env = {
     return new EnvBooleanOption(envVar);
   },
 
-  enum<E>(envVar: string, enumeration: EnumDef<E>): EnvEnumOption<E> {
+  enumeration<E>(envVar: string, enumeration: EnumDef<E>): EnvEnumOption<E> {
     return new EnvEnumOption(envVar, enumeration);
   },
-
-  load<T extends Record<string, EnvOption<any>>>(
-    config: T,
-  ): { [K in keyof T]: Readonly<EnvOptionValueOf<T[K]>> } {
-    const valueEntities = Object.entries(config).map(([key, option]) => {
-      return [key, option.load()];
-    });
-    return Object.fromEntries(valueEntities);
-  },
 } as const;
+
+function loadConfig<T extends Record<string, EnvOption<any>>>(
+  config: T,
+): { [K in keyof T]: Readonly<EnvOptionValueOf<T[K]>> } {
+  const valueEntities = Object.entries(config).map(([key, option]) => {
+    return [key, option.load()];
+  });
+  return Object.fromEntries(valueEntities);
+}
+
+export const loadEnv = <T extends Record<string, EnvOption<any>>>(
+  configFactory: (loaders: Loaders) => T,
+): { [K in keyof T]: Readonly<EnvOptionValueOf<T[K]>> } => {
+  const config = configFactory(loaders);
+  return loadConfig(config);
+};

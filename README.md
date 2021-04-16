@@ -15,7 +15,7 @@ yarn add @stockopedia/typed-env
 ## Usage
 
 ```typescript
-import { env } from '@stockopedia/typed-env'
+import { loadEnv } from '@stockopedia/typed-env'
 
 enum Fruit {
   Apples = "apples",
@@ -28,12 +28,12 @@ process.env["NUMBER"] = "42";
 process.env["IS_ON"] = "1";
 process.env["FRUIT"] = "apples";
 
-const config = env.load({
-  str: env.string("STRING"),
-  num: env.number("NUMBER"),
-  on: env.bool("IS_ON"),
-  fruit: env.enum("FRUIT", Fruit),
-});
+const config = loadEnv(({ string, number, bool, enumeration }) => ({
+  str: string("STRING"),
+  num: number("NUMBER"),
+  on: bool("IS_ON"),
+  fruit: enumeration("FRUIT", Fruit),
+}));
 
 console.log(config);
 // Will be
@@ -59,12 +59,12 @@ By default, any values not found in the environment will throw an error,
 but sometimes you want some values to be optional, e.g.
 
 ```typescript
-const config = env.load({
-  str: env.string("STRING").optional(),
-  num: env.number("NUMBER").optional(),
-  on: env.bool("IS_ON").optional(),
-  fruit: env.enum("FRUIT", Fruit).optional(),
-});
+const config = loadEnv(({ string, number, bool, enumeration }) => ({
+  str: string("STRING").optional(),
+  num: number("NUMBER").optional(),
+  on: bool("IS_ON").optional(),
+  fruit: enumeration("FRUIT", Fruit).optional(),
+}));
 
 console.log(config);
 // Will be if the values aren't in the environment
@@ -76,12 +76,12 @@ console.log(config);
 }
 ```
 
-You can also chose to make values optional only under certain circumstances, by passing a predicate, e.g.
+You can also choose to make values optional only under certain circumstances, by passing a predicate, e.g.
 
 ```typescript
-const config = env.load({
-  str: env.string("STRING").optional(() => process.env.NODE_ENV === 'development'),
-});
+const config = loadEnv(({ string }) => ({
+  str: string("STRING").optional(() => process.env.NODE_ENV === 'development'),
+}));
 ```
 
 ### Default values
@@ -89,12 +89,12 @@ const config = env.load({
 If you want to provide defaults for optional value, it's a cinch:
 
 ```typescript
-const config = env.load({
-  str: env.string("STRING").optional().default("val"),
-  num: env.number("NUMBER").optional().default(99),
-  on: env.bool("IS_ON").optional().default(false),
-  fruit: env.enum("FRUIT", Fruit).optional().default(Fruit.Bananas),
-});
+const config = loadEnv(({ string, number, bool, enumeration }) => ({
+  str: string("STRING").optional().default("val"),
+  num: number("NUMBER").optional().default(99),
+  on: bool("IS_ON").optional().default(false),
+  fruit: enumeration("FRUIT", Fruit).optional().default(Fruit.Bananas),
+}));
 
 
 console.log(config);
