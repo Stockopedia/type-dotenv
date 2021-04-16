@@ -34,10 +34,6 @@ export abstract class EnvOption<T> {
   }
 
   private loadOptional(): T {
-    if (this.defaultValue !== null) {
-      return this.defaultValue;
-    } else {
-      return (null as unknown) as T;
-    }
+    return this.defaultValue as unknown as T;
   }
 }
